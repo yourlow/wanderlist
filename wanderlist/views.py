@@ -12,7 +12,7 @@ def add_business(request, business_name, business_password):
     business_instance = Business.objects.create(name=business_name, password=business_password)
     return HttpResponse("added" + business_name)
 
-def set_user(request, id, name, password, rank, instagram, facebook, twitter):
+def set_user(request, name, password, rank, instagram, facebook, twitter):
     new_user = User.objects.create(name=name, password=password, rank=rank, instagram=instagram, facebook=facebook, twitter=twitter)
     return HttpResponse("added" + name)
 
