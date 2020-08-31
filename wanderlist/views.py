@@ -8,13 +8,6 @@ def index(request):
    #return render(request, "base.html")
     return HttpResponse("Hello world, you're at the wanderlist index, just a test")
 
-def matt(request):
-    return HttpResponse("pleeease work")
-
-def brian(request, id):
-    all_users = Activity.objects
-    return HttpResponse(all_users)
-
 def add_business(request, business_name, business_password):
     business_instance = Business.objects.create(name=business_name, password=business_password)
     return HttpResponse("added" + business_name)
@@ -35,7 +28,7 @@ def get_rewards(request, activity_id):
 
 def get_user_rewards(request, user_id, redeemed):
     # work out how to do booleans
-    rewards = User_Rewards.objects.filter(user_id=user_id, redeemed=False).values('id', 'reward_id')
+    rewards = User_Rewards.objects.filter(user_id=user_id, redeemed=redeemed).values('id', 'reward_id')
     rewards_list = list(rewards)
     return JsonResponse(rewards_list, safe=False)
 
