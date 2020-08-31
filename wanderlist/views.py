@@ -55,3 +55,8 @@ def get_all_business(request):
     business = Business.objects.all().values('id', 'name', 'password')
     business_list = list(business)
     return JsonResponse(business_list, safe=False)
+
+def get_bucketlists(request, user_id):
+    bucketlist = BucketList.objects.filter(user_id=user_id).values('id', 'name', 'user_id')
+    bucketlist_list = list(bucketlist)
+    return JsonResponse(bucketlist_list, safe=False)

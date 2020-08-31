@@ -11,4 +11,5 @@ urlpatterns = [
     path('get_all_business', views.get_all_business, name='get_all_business'),
     path('set_user/<name>/<password>/<rank>/<instagram>/<facebook>/<twitter>', views.set_user, name='set_user'),
     path('update_user_name/<id>/<new_name>', views.update_user_name, name='update_user_name'),
+    path('get_bucketlists/<user_id>', views.get_bucketlists, name='get_bucketlists'),
 ]
