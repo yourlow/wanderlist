@@ -9,5 +9,5 @@ urlpatterns = [
     path('get_specific_user_rewards/<user_id>/<reward_id>', views.get_specific_user_reward, name='get_specific_user_rewards'),
     path('get_business/<id>', views.get_business, name='get_business'),
     path('get_all_business', views.get_all_business, name='get_all_business'),
-    path('set_user', views.set_user, name='set_user'),
+    path('set_user/<name>/<password>/<rank>/<instagram>/<facebook>/<twitter>', views.set_user, name='set_user'),
 ]
