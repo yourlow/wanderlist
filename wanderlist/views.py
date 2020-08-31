@@ -8,9 +8,6 @@ def index(request):
    #return render(request, "base.html")
     return HttpResponse("Hello world, you're at the wanderlist index, just a test")
 
-def matt(request):
-    return HttpResponse("pleeease work")
-
 def brian(request, id):
     all_users = Activity.objects
     return HttpResponse(all_users)
