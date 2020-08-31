@@ -16,6 +16,10 @@ def set_user(request, name, password, rank, instagram, facebook, twitter):
     new_user = User.objects.create(name=name, password=password, rank=rank, instagram=instagram, facebook=facebook, twitter=twitter)
     return HttpResponse("added" + name)
 
+def update_user_name(request, id, new_name):
+    update_user = User.objects.filter(id=id).update(name=new_name)
+    return HttpResponse("new name is: " + new_name)
+
 def get_business_by_id(request, business_id):
     get_activity = Business.objects.all().filter(id=business_id)
     return HttpResponse(get_activity)
