@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from .models import *
 
@@ -22,3 +22,13 @@ def add_business(request, business_name, business_password):
 def get_business_by_id(request, business_id):
     get_activity = Business.objects.all().filter(id=business_id)
     return HttpResponse(get_activity)
+
+def get_bucketlist_activities(request, bucketlist_id):
+    bucketlist_activities = BucketList_Activity.objects.filter(bucketlist_id=bucketlist_id).values('activity_id')
+    bucketlist_activities_list = list(bucketlist_activities)
+    return JsonResponse(bucketlist_activities_list, safe=False)
+
+def get_rewards(request, activity_id):
+    rewards = Reward.objects.filter(activity_id=activity_id).values('id')
+    rewards_list = list(rewards)
+    return JsonResponse(rewards_list, safe=False)
