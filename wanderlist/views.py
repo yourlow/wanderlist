@@ -60,3 +60,12 @@ def get_bucketlists(request, user_id):
     bucketlist = BucketList.objects.filter(user_id=user_id).values('id', 'name', 'user_id')
     bucketlist_list = list(bucketlist)
     return JsonResponse(bucketlist_list, safe=False)
+
+def post_list(request, list_name, user_id):
+    user = User.objects.get(id=user_id)
+    new_list = BucketList.objects.create(name=list_name, user_id=user)
+    return HttpResponse("added post list = " + list_name)
+
+# def add_business(request, business_name, business_password):
+#     business_instance = Business.objects.create(name=business_name, password=business_password)
+#     return HttpResponse("added" + business_name)
