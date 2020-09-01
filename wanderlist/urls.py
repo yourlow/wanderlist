@@ -13,4 +13,5 @@ urlpatterns = [
     path('update_user_name/<id>/<new_name>', views.update_user_name, name='update_user_name'),
     path('get_bucketlists/<user_id>', views.get_bucketlists, name='get_bucketlists'),
     path('post_list/<list_name>/<user_id>', views.post_list, name='post_list'),
+    path('get_activities/', views.get_activities, name='get_activities'),
 ]
