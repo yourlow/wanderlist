@@ -16,5 +16,5 @@ urlpatterns = [
     path('get_activity', views.get_activity, name="get_activity"),
     path('get_user/<user_id>', views.get_user, name="get_user"),
     path('get_user_rewards/<user_id>', views.get_user_rewards, name='get_user_rewards'),
-    path('create_list/<name>/<user_id>', views.create)list, name='create_list'),
+    path('create_list/<name>/<user_id>', views.create_list, name='create_list'),
 ]
