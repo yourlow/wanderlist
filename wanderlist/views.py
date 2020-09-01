@@ -23,9 +23,10 @@ def get_business_by_id(request, business_id):
     return HttpResponse(get_activity)
 
 def get_bucketlist_activities(request, bucketlist_id):
-    bucketlist_activities = BucketList_Activity.objects.filter(bucketlist_id=bucketlist_id).values('activity_id')
-    bucketlist_activities_list = list(bucketlist_activities)
-    return JsonResponse(bucketlist_activities_list, safe=False)
+    bucketlist_activities = list(BucketList_Activity.objects.filter(bucketlist_id=bucketlist_id).values('activity_id', 'completed'))
+    for activity in bucketlist_activities:
+        activity.update(list(Activity.objects.filter(id=activity['activity_id']).values('title', 'latitude', 'longitude'))[0])
+    return JsonResponse(bucketlist_activities, safe=False)
 
 def get_rewards(request, activity_id):
     rewards = Reward.objects.filter(activity_id=activity_id).values('id')
@@ -83,3 +84,4 @@ def get_user_rewards(request, user_id):
     for reward in user_rewards:
         reward['name'] = Reward.objects.filter(id=reward['reward_id']).values('name')[0]['name']
     return JsonResponse(user_rewards, safe=False)
+
