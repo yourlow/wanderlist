@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
 from .models import *
 
+
 def index(request):
-   # template = loader.get_template('templates/base.html')
-   #return render(request, "base.html")
-    return HttpResponse("Hello world, you're at the wanderlist index, just a test")
+    return HttpResponse('Refer to onedrive Routes document for details on routes')
 
 def add_business(request, business_name, business_password):
     business_instance = Business.objects.create(name=business_name, password=business_password)
@@ -65,6 +63,16 @@ def post_list(request, list_name, user_id):
     user = User.objects.get(id=user_id)
     new_list = BucketList.objects.create(name=list_name, user_id=user)
     return HttpResponse("added post list = " + list_name)
+
+def get_activity(request):
+    activities = list(Activity.objects.values())
+    return JsonResponse(activities, safe=False)
+
+#will be changed when authentication is added
+def get_user(request, user_id):
+    user = list(User.objects.filter(id=user_id).values())
+    return JsonResponse(user, safe=False)
+
 
 # def add_business(request, business_name, business_password):
 #     business_instance = Business.objects.create(name=business_name, password=business_password)
