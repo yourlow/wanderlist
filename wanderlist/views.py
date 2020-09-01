@@ -84,6 +84,6 @@ def get_user_rewards(request, user_id):
         reward['name'] = Reward.objects.filter(id=reward['reward_id']).values('name')[0]['name']
     return JsonResponse(user_rewards, safe=False)
 
-def create_list(request, list_name, user_id):
-    new_list = BucketList.objects.create(name=list_name, user_id=user_id)
+def create_list(request, name, user_id):
+    new_list = BucketList.objects.create(name=name, user_id=user_id)
     return HttpResponse("created list: " + new_list)
