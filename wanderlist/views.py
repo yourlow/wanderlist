@@ -77,3 +77,9 @@ def get_user(request, user_id):
 # def add_business(request, business_name, business_password):
 #     business_instance = Business.objects.create(name=business_name, password=business_password)
 #     return HttpResponse("added" + business_name)
+
+def get_user_rewards(request, user_id):
+    user_rewards = list(User_Rewards.objects.filter(id=user_id).values('reward_id', 'redeemed'))
+    for reward in user_rewards:
+        reward['name'] = Reward.objects.filter(id=reward['reward_id']).values('name')[0]['name']
+    return JsonResponse(user_rewards, safe=False)
