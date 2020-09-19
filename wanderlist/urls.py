@@ -14,6 +14,7 @@ urlpatterns = [
     path('get_bucketlists/<user_id>', views.get_bucketlists, name='get_bucketlists'),
     path('post_list/<list_name>/<user_id>', views.post_list, name='post_list'),
     path('get_activity', views.get_activity, name="get_activity"),
+    path('get_activity/<activity_id>', views.get_activity_specific, name="get_activity_specific"),
     path('get_user/<user_id>', views.get_user, name="get_user"),
     path('get_user_rewards/<user_id>', views.get_user_rewards, name='get_user_rewards'),
     path('create_list/<name>/<user_id>', views.create_list, name='create_list'),

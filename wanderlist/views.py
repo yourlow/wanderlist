@@ -69,6 +69,12 @@ def get_activity(request):
     activities = list(Activity.objects.values())
     return JsonResponse(activities, safe=False)
 
+def get_activity_specific(request, activity_id):
+    activities = Activity.objects.filter(id=activity_id).values()
+    print(list(activities))
+    return JsonResponse(list(activities), safe=False)
+    
+
 #will be changed when authentication is added
 def get_user(request, user_id):
     user = list(User.objects.filter(id=user_id).values())
