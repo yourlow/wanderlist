@@ -19,6 +19,7 @@ class Activity(models.Model):
     video = models.URLField(blank=True)    
     education = models.URLField(blank=True)
     business_id = models.ForeignKey(Business, on_delete=models.CASCADE, blank=True, null=True)
+    tags = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         return str(self.id) + ' ' + self.title
