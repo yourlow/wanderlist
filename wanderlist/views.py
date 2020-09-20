@@ -73,7 +73,12 @@ def get_activity_specific(request, activity_id):
     activities = Activity.objects.filter(id=activity_id).values()
     print(list(activities))
     return JsonResponse(list(activities), safe=False)
-    
+
+def add_activity_to_list(request, list_id, activity_id):
+    bucketlist = BucketList.objects.get(id=list_id)
+    activity = Activity.objects.get(id=activity_id)
+    BucketList_Activity.objects.create(bucketlist_id=bucketlist, activity_id=activity, completed = False)
+    return HttpResponse("added activity " + activity_id + " to the list " + list_id)
 
 #will be changed when authentication is added
 def get_user(request, user_id):
