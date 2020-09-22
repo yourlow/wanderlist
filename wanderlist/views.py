@@ -25,8 +25,8 @@ def get_business_by_id(request, business_id):
 def get_bucketlist_activities(request, bucketlist_id):
     bucketlist_activities = list(BucketList_Activity.objects.filter(bucketlist_id=bucketlist_id).values('activity_id', 'completed'))
     for activity in bucketlist_activities:
-        activity.update(list(Activity.objects.filter(id=activity['activity_id']).values('title', 'latitude', 'longitude'))[0])
-    return JsonResponse(bucketlist_activities, safe=False)
+        activity.update(list(Activity.objects.filter(id=activity['activity_id']).values('title', 'latitude', 'longitude', 'tags'))[0])
+    return JsonResponse(bucketlist_activities, safe=False) 
 
 def get_rewards(request, activity_id):
     rewards = Reward.objects.filter(activity_id=activity_id).values('id')
