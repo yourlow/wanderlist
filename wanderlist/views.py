@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import *
+from django.template import loader
 
 
 def index(request):
-    return HttpResponse('Refer to onedrive Routes document for details on routes')
+    #return HttpResponse('Refer to onedrive Routes document for details on routes')
+    template = loader.get_template('wanderlist/index.html')
+    context = {
+    }
+    return HttpResponse(template.render(context, request))
 
 def add_business(request, business_name, business_password):
     business_instance = Business.objects.create(name=business_name, password=business_password)

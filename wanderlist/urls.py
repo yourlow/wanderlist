@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -19,4 +21,4 @@ urlpatterns = [
     path('get_user/<user_id>', views.get_user, name="get_user"),
     path('get_user_rewards/<user_id>', views.get_user_rewards, name='get_user_rewards'),
     path('create_list/<name>/<user_id>', views.create_list, name='create_list'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
