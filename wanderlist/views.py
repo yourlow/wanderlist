@@ -17,7 +17,7 @@ def add_business(request, business_name, business_password):
 
 def set_user(request, name, password, rank, instagram, facebook, twitter):
     new_user = User.objects.create(name=name, password=password, rank=rank, instagram=instagram, facebook=facebook, twitter=twitter)
-    return HttpResponse("added" + name)
+    return HttpResponse("added " + name)
 
 def update_user_name(request, id, new_name):
     update_user = User.objects.filter(id=id).update(name=new_name)
@@ -32,6 +32,11 @@ def get_bucketlist_activities(request, bucketlist_id):
     for activity in bucketlist_activities:
         activity.update(list(Activity.objects.filter(id=activity['activity_id']).values('title', 'latitude', 'longitude', 'tags'))[0])
     return JsonResponse(bucketlist_activities, safe=False) 
+
+def complete_activity(request, user_id, activity_id, qr_code):
+    activities = Activity.objects.filter(id=activity_id).values()
+    print(activities)
+    return HttpResponse("Hello")
 
 def get_rewards(request, activity_id):
     rewards = Reward.objects.filter(activity_id=activity_id).values('id')

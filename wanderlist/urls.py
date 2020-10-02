@@ -18,6 +18,7 @@ urlpatterns = [
     path('get_activity', views.get_activity, name="get_activity"),
     path('get_activity/<activity_id>', views.get_activity_specific, name="get_activity_specific"),
     path('add_activity_to_list/<list_id>/<activity_id>', views.add_activity_to_list, name="add_activity_to_list"),
+    path('complete_activity/<user_id>/<activity_id>/<qr_code>', views.complete_activity, name='complete_activty'),
     path('get_user/<user_id>', views.get_user, name="get_user"),
     path('get_user_rewards/<user_id>', views.get_user_rewards, name='get_user_rewards'),
     path('create_list/<name>/<user_id>', views.create_list, name='create_list'),
