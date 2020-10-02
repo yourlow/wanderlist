@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.template import loader
 from django.http import HttpResponse, JsonResponse
-
+from rest_framework import viewsets
+from django.shortcuts import get_object_or_404
 
 def index(request):
     #return HttpResponse('Refer to onedrive Routes document for details on routes')
@@ -53,10 +54,6 @@ class BusinessDetail(APIView):
         business = self.get_object(id)
         business.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    def get_business(self, request, id, format=None):
-        business = list(Business.objects.filter(id=id).values('id', 'name'))
-        return Response(business, status=status.HTTP_200_OK)
 
 class ActivityList(APIView):
     def get(self, request, format=None):
@@ -66,6 +63,140 @@ class ActivityList(APIView):
 
     def post(self, request, format=None):
         serializer = ActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class ActivityDetail(APIView):
+    def get_object(self, id):
+        try:
+            return Activity.objects.get(id=id)
+        except Activity.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, id, format=None):
+        activity = self.get_object(id)
+        serializer = ActivitySerializer(activity)
+        return Response(serializer.data)
+
+    def put(self, request, id, format=None):
+        activity = self.get_object(id)
+        serializer = ActivitySerializer(activity, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id, format=None):
+        activity = self.get_object(id)
+        activity.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class UserList(APIView):
+    def get(self, request, format=None):
+        user = User.objects.all()
+        serializer = UserSerializer(user, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class UserDetail(APIView):
+    def get_object(self, id):
+        try:
+            return User.objects.get(id=id)
+        except User.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, id, format=None):
+        user = self.get_object(id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    def put(self, request, id, format=None):
+        user = self.get_object(id)
+        serializer = UserSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id, format=None):
+        user = self.get_object(id)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class BucketListList(APIView):
+    def get(self, request, format=None):
+        bucket_list = BucketList.objects.all()
+        serializer = BucketListSerializer(bucket_list, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = BucketListSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class RewardList(APIView):
+    def get(self, request, format=None):
+        reward = Reward.objects.all()
+        serializer = RewardSerializer(reward, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = RewardSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class User_RewardsList(APIView):
+    def get(self, request, format=None):
+        user_rewards = User_Rewards.objects.all()
+        serializer = User_RewardsSerializer(user_rewards, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = User_RewardsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class BucketList_ActivityList(APIView):
+    def get(self, request, format=None):
+        bucket_list_activity = BucketList_Activity.objects.all()
+        serializer = BucketList_ActivitySerializer(bucket_list_activity, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = BucketList_ActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class User_ActivityList(APIView):
+    def get(self, request, format=None):
+        user_activity_list = User_Activity.objects.all()
+        serializer = User_ActivitySerializer(user_activity_list, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = User_ActivitySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
