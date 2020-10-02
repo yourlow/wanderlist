@@ -1,8 +1,9 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from .models import *
-from django.template import loader
-
+from wanderlist.models import *
+from wanderlist.serializers import *
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 def index(request):
     #return HttpResponse('Refer to onedrive Routes document for details on routes')
@@ -11,101 +12,59 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
-def add_business(request, business_name, business_password):
-    business_instance = Business.objects.create(name=business_name, password=business_password)
-    return HttpResponse("added" + business_name)
+class BusinessList(APIView):
+    def get(self, request, format=None):
+        businesses = Business.objects.all()
+        serializer = BusinessSerializer(businesses, many=True)
+        return Response(serializer.data)
 
-def set_user(request, name, password, rank, instagram, facebook, twitter):
-    new_user = User.objects.create(name=name, password=password, rank=rank, instagram=instagram, facebook=facebook, twitter=twitter)
-    return HttpResponse("added " + name)
+    def post(self, request, format=None):
+        serializer = BusinessSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-def update_user_name(request, id, new_name):
-    update_user = User.objects.filter(id=id).update(name=new_name)
-    return HttpResponse("new name is: " + new_name)
+class BusinessDetail(APIView):
+    def get_object(self, id):
+        try:
+            return Business.objects.get(id=id)
+        except Business.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, id, format=None):
+        business = self.get_object(id)
+        serializer = BusinessSerializer(business)
+        return Response(serializer.data)
 
-def get_business_by_id(request, business_id):
-    get_activity = Business.objects.all().filter(id=business_id)
-    return HttpResponse(get_activity)
+    def put(self, request, id, format=None):
+        business = self.get_object(id)
+        serializer = BusinessSerializer(business, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id, format=None):
+        business = self.get_object(id)
+        business.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def get_business(self, request, id, format=None):
+        business = list(Business.objects.filter(id=id).values('id', 'name'))
+        return Response(business, status=status.HTTP_200_OK)
 
-def get_bucketlist_activities(request, bucketlist_id):
-    bucketlist_activities = list(BucketList_Activity.objects.filter(bucketlist_id=bucketlist_id).values('activity_id', 'completed'))
-    for activity in bucketlist_activities:
-        activity.update(list(Activity.objects.filter(id=activity['activity_id']).values('title', 'latitude', 'longitude', 'tags'))[0])
-    return JsonResponse(bucketlist_activities, safe=False) 
+class ActivityList(APIView):
+    def get(self, request, format=None):
+        activity = Activity.objects.all()
+        serializer = ActivitySerializer(activity, many=True)
+        return Response(serializer.data)
 
-def complete_activity(request, user_id, activity_id, qr_code):
-    activities = Activity.objects.filter(id=activity_id).values()
-    print(activities)
-    return HttpResponse("Hello")
-
-def get_rewards(request, activity_id):
-    rewards = Reward.objects.filter(activity_id=activity_id).values('id')
-    rewards_list = list(rewards)
-    return JsonResponse(rewards_list, safe=False)
-
-def get_user_rewards(request, user_id, redeemed):
-    # work out how to do booleans
-    rewards = User_Rewards.objects.filter(user_id=user_id, redeemed=redeemed).values('id', 'reward_id')
-    rewards_list = list(rewards)
-    return JsonResponse(rewards_list, safe=False)
-
-def get_specific_user_reward(request, user_id, reward_id):
-    # seems weird, returns different ids 
-    rewards = User_Rewards.objects.filter(user_id=user_id, reward_id=reward_id).values('id', 'reward_id')
-    rewards_list = list(rewards)
-    return JsonResponse(rewards_list, safe=False)
-
-def get_business(request, id):
-    business = Business.objects.filter(id=id).values('id','name')
-    business_list = list(business)
-    return JsonResponse(business_list, safe=False)
-
-def get_all_business(request):
-    business = Business.objects.all().values('id', 'name', 'password')
-    business_list = list(business)
-    return JsonResponse(business_list, safe=False)
-
-def get_bucketlists(request, user_id):
-    bucketlist = BucketList.objects.filter(user_id=user_id).values('id', 'name', 'user_id')
-    bucketlist_list = list(bucketlist)
-    return JsonResponse(bucketlist_list, safe=False)
-
-def post_list(request, list_name, user_id):
-    user = User.objects.get(id=user_id)
-    new_list = BucketList.objects.create(name=list_name, user_id=user)
-    return HttpResponse("added post list = " + list_name)
-
-def get_activity(request):
-    activities = list(Activity.objects.values())
-    return JsonResponse(activities, safe=False)
-
-def get_activity_specific(request, activity_id):
-    activities = Activity.objects.filter(id=activity_id).values()
-    print(list(activities))
-    return JsonResponse(list(activities), safe=False)
-
-def add_activity_to_list(request, list_id, activity_id):
-    bucketlist = BucketList.objects.get(id=list_id)
-    activity = Activity.objects.get(id=activity_id)
-    BucketList_Activity.objects.create(bucketlist_id=bucketlist, activity_id=activity, completed = False)
-    return HttpResponse("added activity " + activity_id + " to the list " + list_id)
-
-#will be changed when authentication is added
-def get_user(request, user_id):
-    user = list(User.objects.filter(id=user_id).values())
-    return JsonResponse(user, safe=False)
-
-
-# def add_business(request, business_name, business_password):
-#     business_instance = Business.objects.create(name=business_name, password=business_password)
-#     return HttpResponse("added" + business_name)
-
-def get_user_rewards(request, user_id):
-    user_rewards = list(User_Rewards.objects.filter(id=user_id).values('reward_id', 'redeemed'))
-    for reward in user_rewards:
-        reward['name'] = Reward.objects.filter(id=reward['reward_id']).values('name')[0]['name']
-    return JsonResponse(user_rewards, safe=False)
-
-def create_list(request, name, user_id):
-    new_list = BucketList.objects.create(name=name, user_id=user_id)
-    return HttpResponse("created list: " + new_list)
+    def post(self, request, format=None):
+        serializer = ActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
