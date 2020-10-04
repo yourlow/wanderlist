@@ -1,14 +1,10 @@
-from wanderlist.models import *
 from wanderlist.serializers import *
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.template import loader
-from django.http import HttpResponse, JsonResponse
-from rest_framework import viewsets
-from django.shortcuts import get_object_or_404
-
+from django.http import HttpResponse
 def index(request):
     #return HttpResponse('Refer to onedrive Routes document for details on routes')
     template = loader.get_template('wanderlist/index.html')

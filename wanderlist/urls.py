@@ -23,7 +23,7 @@ urlpatterns = [
     path('bucketlist/<int:id>/', views.BucketListDetail.as_view()),
     path('rewards/<int:id>/', views.RewardDetail.as_view()),
     path('user_rewards/<int:id>', views.User_RewardsDetail.as_view()),
-    path('bucketlist_activitiy/<int:id>/', views.BucketList_ActivityDetail.as_view()),
+    path('bucketlist_activity/<int:id>/', views.BucketList_ActivityDetail.as_view()),
     path('user_activity/<int:id>/', views.User_ActivityDetail.as_view()),
 
     ## custom views
