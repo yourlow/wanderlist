@@ -25,4 +25,11 @@ urlpatterns = [
     path('user_rewards/<int:id>', views.User_RewardsDetail.as_view()),
     path('bucketlist_activitiy/<int:id>/', views.BucketList_ActivityDetail.as_view()),
     path('user_activity/<int:id>/', views.User_ActivityDetail.as_view()),
+
+    ## custom views
+    path('get_bucketlist_activities/<int:id>/', views.GetBucketlistActivities.as_view()),
+    path('get_reward/<int:id>/', views.GetRewards.as_view()),
+    path('get_user_rewards/<int:id>/<redeemed>/', views.GetUserRewards.as_view()),
+    path('get_specific_user_rewards/<int:user_id>/<int:reward_id>/', views.GetSpecificUserRewards.as_view()),
+    path('get_specific_activity/<int:id>/', views.GetSpecificActivity.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -427,3 +427,69 @@ class GetUserRewards(APIView):
         activity = self.get_object(id)
         activity.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class GetBucketlistActivities(APIView):
+    def get_object(self, id):
+        try:
+            return BucketList_Activity.objects.get(id=id)
+        except BucketList_Activity.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        bucketlist_activities = list(
+            BucketList_Activity.objects.filter(bucketlist_id=id).values('activity_id', 'completed'))
+        for activity in bucketlist_activities:
+            activity.update(list(
+                Activity.objects.filter(id=activity['activity_id']).values('title', 'latitude', 'longitude', 'tags'))[
+                                0])
+        return Response(bucketlist_activities)
+
+class GetRewards(APIView):
+    def get_object(self, id):
+        try:
+            return Reward.objects.get(id=id)
+        except Reward.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        rewards = Reward.objects.filter(activity_id=id).values('id')
+        rewards_list = list(rewards)
+        return Response(rewards_list)
+
+class GetUserRewards(APIView):
+    def get_object(self, id):
+        try:
+            return User_Rewards.objects.get(id=id)
+        except User_Rewards.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, redeemed, format=None):
+        # work out how to do booleans
+        rewards = User_Rewards.objects.filter(user_id=id, redeemed=redeemed).values('id', 'reward_id')
+        rewards_list = list(rewards)
+        return Response(rewards_list)
+
+class GetSpecificUserRewards(APIView):
+    def get_object(self, id):
+        try:
+            return User_Rewards.objects.get(id=id)
+        except User_Rewards.DoesNotExist:
+            raise Http404
+
+    def get(self, request, user_id, reward_id, format=None):
+        # seems weird, returns different ids
+        rewards = User_Rewards.objects.filter(user_id=user_id, reward_id=reward_id).values('id', 'reward_id')
+        rewards_list = list(rewards)
+        return Response(rewards_list)
+
+class GetSpecificActivity(APIView):
+    def get_object(self, id):
+        try:
+            return Activity.objects.get(id=id)
+        except Activity.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        activities = Activity.objects.filter(id=id).values()
+        return Response(list(activities))
