@@ -55,6 +55,14 @@ class BusinessDetail(APIView):
         business.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    def patch(self, request, id, format=None):
+        business = self.get_object(id)
+        serializer = BusinessSerializer(business, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class ActivityList(APIView):
     def get(self, request, format=None):
         activity = Activity.objects.all()
@@ -93,6 +101,14 @@ class ActivityDetail(APIView):
         activity = self.get_object(id)
         activity.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, id, format=None):
+        activity = self.get_object(id)
+        serializer = ActivitySerializer(activity, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserList(APIView):
     def get(self, request, format=None):
@@ -133,6 +149,14 @@ class UserDetail(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    def patch(self, request, id, format=None):
+        user = self.get_object(id)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class BucketListList(APIView):
     def get(self, request, format=None):
         bucket_list = BucketList.objects.all()
@@ -146,6 +170,39 @@ class BucketListList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class BucketListDetail(APIView):
+    def get_object(self, id):
+        try:
+            return BucketList.objects.get(id=id)
+        except BucketList.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        bucketlist = self.get_object(id)
+        serializer = BucketListSerializer(bucketlist)
+        return Response(serializer.data)
+
+    def put(self, request, id, format=None):
+        bucketlist = self.get_object(id)
+        serializer = BucketListSerializer(bucketlist, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        bucketlist = self.get_object(id)
+        bucketlist.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, id, format=None):
+        bucketlist = self.get_object(id)
+        serializer = BucketListSerializer(bucketlist, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RewardList(APIView):
     def get(self, request, format=None):
@@ -161,6 +218,39 @@ class RewardList(APIView):
         
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
+class RewardDetail(APIView):
+    def get_object(self, id):
+        try:
+            return Reward.objects.get(id=id)
+        except Reward.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        reward = self.get_object(id)
+        serializer = RewardSerializer(reward)
+        return Response(serializer.data)
+
+    def put(self, request, id, format=None):
+        reward = self.get_object(id)
+        serializer = RewardSerializer(reward, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        reward = self.get_object(id)
+        reward.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, id, format=None):
+        reward = self.get_object(id)
+        serializer = RewardSerializer(reward, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class User_RewardsList(APIView):
     def get(self, request, format=None):
         user_rewards = User_Rewards.objects.all()
@@ -174,6 +264,39 @@ class User_RewardsList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class User_RewardsDetail(APIView):
+    def get_object(self, id):
+        try:
+            return User_Rewards.objects.get(id=id)
+        except User_Rewards.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        user_reward = self.get_object(id)
+        serializer = User_RewardsSerializer(user_reward)
+        return Response(serializer.data)
+
+    def put(self, request, id, format=None):
+        user_reward = self.get_object(id)
+        serializer = User_RewardsSerializer(user_reward, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        user_reward = self.get_object(id)
+        user_reward.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, id, format=None):
+        user_rewards = self.get_object(id)
+        serializer = User_RewardsSerializer(user_rewards, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BucketList_ActivityList(APIView):
     def get(self, request, format=None):
@@ -189,6 +312,39 @@ class BucketList_ActivityList(APIView):
         
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
+class BucketList_ActivityDetail(APIView):
+    def get_object(self, id):
+        try:
+            return BucketList_Activity.objects.get(id=id)
+        except BucketList_Activity.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        bucketlist_activity = self.get_object(id)
+        serializer = BucketList_ActivitySerializer(bucketlist_activity)
+        return Response(serializer.data)
+
+    def put(self, request, id, format=None):
+        bucketlist_activity = self.get_object(id)
+        serializer = BucketList_ActivitySerializer(bucketlist_activity, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        bucketlist_activity = self.get_object(id)
+        bucketlist_activity.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, id, format=None):
+        bucketlist_activity = self.get_object(id)
+        serializer = BucketList_ActivitySerializer(bucketlist_activity, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class User_ActivityList(APIView):
     def get(self, request, format=None):
         user_activity_list = User_Activity.objects.all()
@@ -202,3 +358,72 @@ class User_ActivityList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class User_ActivityDetail(APIView):
+    def get_object(self, id):
+        try:
+            return User_Activity.objects.get(id=id)
+        except User_Activity.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        user_activity = self.get_object(id)
+        serializer = User_ActivitySerializer(user_activity)
+        return Response(serializer.data)
+
+    def put(self, request, id, format=None):
+        user_activity = self.get_object(id)
+        serializer = User_ActivitySerializer(user_activity, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        user_activity = self.get_object(id)
+        user_activity.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, id, format=None):
+        user_activity = self.get_object(id)
+        serializer = User_ActivitySerializer(user_activity, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetUserRewards(APIView):
+    def get_reward_object(self, id):
+        try:
+            return Reward.objects.get(id=id)
+        except Reward.DoesNotExist:
+            raise Http404
+
+    def get_object(self, id):
+        try:
+            return User_Rewards.objects.get(id=id)
+        except User_Rewards.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, id, format=None):
+        user_reward = self.get_object(id)
+        user_reward_serializer = User_RewardsSerializer(user_reward)
+        reward_id = user_reward_serializer.data['reward_id']
+        print(reward_id)
+        reward = self.get_reward_object(reward_id)
+        reward_serializer = RewardSerializer(reward)
+        print(reward_serializer.data)
+        return Response(reward_serializer.data)
+
+    def put(self, request, id, format=None):
+        activity = self.get_object(id)
+        serializer = ActivitySerializer(activity, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id, format=None):
+        activity = self.get_object(id)
+        activity.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
