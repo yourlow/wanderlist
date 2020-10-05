@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from django.contrib import admin
 
-from .models import Business, Activity, User, BucketList, Reward, User_Rewards, User_Activity, BucketList_Activity
+from .models import *
 """
 class BusinessAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )

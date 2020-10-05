@@ -5,6 +5,23 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.template import loader
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+from rest_framework import generics
+
+class RegisterView(generics.GenericAPIView):
+
+    serializer_class = RegisterSerializer
+
+    def post(self, request):
+        user = request.data
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        user_data = serializer.data
+
+        return Response(user_data, status=status.HTTP_201_CREATED)
+
 def index(request):
     #return HttpResponse('Refer to onedrive Routes document for details on routes')
     template = loader.get_template('wanderlist/index.html')
@@ -108,7 +125,7 @@ class ActivityDetail(APIView):
 
 class UserList(APIView):
     def get(self, request, format=None):
-        user = User.objects.all()
+        user = get_user_model().objects.all()
         serializer = UserSerializer(user, many=True)
         return Response(serializer.data)
 
@@ -123,8 +140,8 @@ class UserList(APIView):
 class UserDetail(APIView):
     def get_object(self, id):
         try:
-            return User.objects.get(id=id)
-        except User.DoesNotExist:
+            return get_user_model().objects.get(id=id)
+        except get_user_model().DoesNotExist:
             raise Http404
     
     def get(self, request, id, format=None):

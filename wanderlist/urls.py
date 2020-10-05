@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import get_user_model
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -32,4 +33,7 @@ urlpatterns = [
     path('get_user_rewards/<int:id>/<redeemed>/', views.GetUserRewards.as_view()),
     path('get_specific_user_rewards/<int:user_id>/<int:reward_id>/', views.GetSpecificUserRewards.as_view()),
     path('get_specific_activity/<int:id>/', views.GetSpecificActivity.as_view()),
+
+    ## login and registration
+    path('register/', views.RegisterView.as_view(), name='register'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -40,3 +40,21 @@ class User_ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = User_Activity
         fields = '__all__'
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=100, min_length = 2, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['name', 'password']
+
+    def validate(self, attrs):
+        username = attrs.get('name', '')
+
+        # if not username.isalnum():
+        #     raise serializers.ValidationError('Only letters and numbers allowed')
+        return attrs
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
+
