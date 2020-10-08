@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.template import loader
 from django.http import HttpResponse
+import json
+
 def index(request):
     #return HttpResponse('Refer to onedrive Routes document for details on routes')
     template = loader.get_template('wanderlist/index.html')
@@ -489,3 +491,34 @@ class GetSpecificActivity(APIView):
     def get(self, request, id, format=None):
         activities = Activity.objects.filter(id=id).values()
         return Response(list(activities))
+
+class CompleteActivity(APIView):
+
+    def post(self, request):
+        
+        print(request.data)
+        data = request.data
+        try:
+            activity = Activity.objects.get(id=data['activity_id'])
+            
+        except:
+            return Response("activity does not exist")
+            
+        print(activity.id)
+        
+        
+        if(data['qr_code'] != activity.id):
+            return Response("qr codes do not match")
+       
+        user_activity = User_Activity.objects.filter(user_id=data['user_id'], activity_id=data['activity_id']).count()
+        print(user_activity)
+        if(user_activity):
+            return Response("already completed")
+        
+        serializer = User_ActivitySerializer(data=data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
