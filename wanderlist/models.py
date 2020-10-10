@@ -8,6 +8,14 @@ STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
 
 #Models for the wanderlist app
 
+class Location(models.Model):
+    name = models.CharField(max_length=200)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    def __str__(self):
+        return str(self.id) + ' Location: ' + str(self.name)
+
 class Business(models.Model):
     name = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
@@ -16,8 +24,6 @@ class Business(models.Model):
         return str(self.id) + ' ' + self.name
 
 class Activity(models.Model):
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
     points = models.IntegerField(default=0)
@@ -27,6 +33,7 @@ class Activity(models.Model):
     business_id = models.ForeignKey(Business, on_delete=models.CASCADE, blank=True, null=True)
     tags = models.CharField(max_length=200, blank=True)
     imageurl = models.CharField(max_length=200, blank=True)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return str(self.id) + ' ' + self.title
@@ -81,3 +88,4 @@ class User_Activity(models.Model):
 
     def __str__(self):
         return str(self.id) + ' User: ' + str(self.user_id) + ' Activity: ' + str(self.activity_id)
+

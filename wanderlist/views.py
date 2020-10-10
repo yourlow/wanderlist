@@ -14,6 +14,21 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
+
+class LocationList(APIView):
+    def get(self, request, format=None):
+        locations = Location.objects.all()
+        serializer = BusinessSerializer(locations, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = LocationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
 class BusinessList(APIView):
     def get(self, request, format=None):
         businesses = Business.objects.all()

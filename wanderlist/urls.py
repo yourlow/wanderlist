@@ -15,6 +15,7 @@ urlpatterns = [
     path('user_rewards/', views.User_RewardsList.as_view()),
     path('bucketlist_activity/', views.BucketList_ActivityList.as_view()),
     path('user_activity/', views.User_ActivityList.as_view()),
+    path('location/', views.LocationList.as_view()),
 
     ## get/put/patch requests
     path('business/<int:id>/', views.BusinessDetail.as_view()),
