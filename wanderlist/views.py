@@ -536,21 +536,20 @@ class SimpleLogin(APIView):
 class CompleteActivity(APIView):
     def post(self, request):
         
-        print(request.data)
         data = request.data
         try:
-            activity = Activity.objects.get(id=data['activity_id'])
+            activity = Activity.objects.get(id=int(data['activity_id']))
             
         except:
             return Response("activity does not exist")
             
-        print(activity.id)
+        print(data)
         
         
-        if(data['qr_code'] != activity.id):
+        if(int(data['qr_code']) != activity.id):
             return Response("qr codes do not match")
        
-        user_activity = User_Activity.objects.filter(user_id=data['user_id'], activity_id=data['activity_id']).count()
+        user_activity = User_Activity.objects.filter(user_id=int(data['user_id']), activity_id=int(data['activity_id'])).count()
         print(user_activity)
         if(user_activity):
             return Response("already completed")
