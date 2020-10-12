@@ -456,6 +456,7 @@ class GetBucketlistActivities(APIView):
             activity.update(list(
                 Activity.objects.filter(id=activity['activity_id']).values('title', 'location', 'tags'))[
                                 0])
+            activity.update(list(Location.objects.filter(id=activity['location']).values('latitude', 'longitude'))[0])
         return Response(bucketlist_activities)
 
 class GetRewards(APIView):
