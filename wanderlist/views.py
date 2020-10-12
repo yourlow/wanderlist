@@ -527,11 +527,14 @@ class GetAllUserRewards(APIView):
 class SimpleLogin(APIView):
     def get(self, request, username, password):
         try:
-            user = Activity.objects.get(username=username)
-            print(user)
+            user = User.objects.filter(name=username).values()
         except:
-            return status.HTTP_401_UNAUTHORIZED
+            return Response(status.HTTP_401_UNAUTHORIZED)
 
+        if user[0]['password'] == password:
+            return Response(user[0]['id'])
+        else:
+            return Response(status.HTTP_401_UNAUTHORIZED)
 
 class CompleteActivity(APIView):
     def post(self, request):
