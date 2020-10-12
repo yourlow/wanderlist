@@ -528,11 +528,13 @@ class SimpleLogin(APIView):
     def get(self, request, username, password):
         try:
             user = User.objects.filter(name=username).values()
+            if 'id' not in user[0]:
+                return Response(status.HTTP_401_UNAUTHORIZED)
         except:
             return Response(status.HTTP_401_UNAUTHORIZED)
 
         if user[0]['password'] == password:
-            return Response(user[0]['id'])
+            return Response(list(user))
         else:
             return Response(status.HTTP_401_UNAUTHORIZED)
 
