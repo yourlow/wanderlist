@@ -18,7 +18,7 @@ def index(request):
 class LocationList(APIView):
     def get(self, request, format=None):
         locations = Location.objects.all()
-        serializer = BusinessSerializer(locations, many=True)
+        serializer = LocationSerializer(locations, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -523,6 +523,15 @@ class GetAllUserRewards(APIView):
     def get(self, request, user_id):
         user_rewards = User_Rewards.objects.filter(user_id=user_id).values()
         return Response(list(user_rewards))
+
+class SimpleLogin(APIView):
+    def get(self, request, username, password):
+        try:
+            user = Activity.objects.get(username=username)
+            print(user)
+        except:
+            return status.HTTP_401_UNAUTHORIZED
+
 
 class CompleteActivity(APIView):
     def post(self, request):
