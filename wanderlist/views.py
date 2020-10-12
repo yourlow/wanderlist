@@ -497,6 +497,12 @@ class GetSpecificUserRewards(APIView):
         rewards_list = list(rewards)
         return Response(rewards_list)
 
+class GetActivityByLocationID(APIView):
+    def get(self, request, location_id):
+        activities = Activity.objects.filter(location=location_id).values()
+        return Response(list(activities))
+
+
 class GetSpecificActivity(APIView):
     def get_object(self, id):
         try:
@@ -508,8 +514,17 @@ class GetSpecificActivity(APIView):
         activities = Activity.objects.filter(id=id).values()
         return Response(list(activities))
 
-class CompleteActivity(APIView):
+class GetBucketlistBelongToUser(APIView):
+    def get(self, request, user_id):
+        bucketlist = BucketList.objects.filter(user_id=user_id).values()
+        return Response(list(bucketlist))
 
+class GetAllUserRewards(APIView):
+    def get(self, request, user_id):
+        user_rewards = User_Rewards.objects.filter(user_id=user_id).values()
+        return Response(list(user_rewards))
+
+class CompleteActivity(APIView):
     def post(self, request):
         
         print(request.data)

@@ -33,5 +33,9 @@ urlpatterns = [
     path('get_user_rewards/<int:id>/<redeemed>/', views.GetUserRewards.as_view()),
     path('get_specific_user_rewards/<int:user_id>/<int:reward_id>/', views.GetSpecificUserRewards.as_view()),
     path('get_specific_activity/<int:id>/', views.GetSpecificActivity.as_view()),
-    path('complete_activity/', views.CompleteActivity.as_view())
+    path('complete_activity/', views.CompleteActivity.as_view()),
+    path('get_activity_by_location/<int:location_id>/', views.GetActivityByLocationID.as_view()),
+    path('get_bucketlist_belonging_to_user/<int:user_id>/', views.GetBucketlistBelongToUser.as_view()),
+    path('get_all_user_rewards/<int:user_id>/', views.GetAllUserRewards.as_view()),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
