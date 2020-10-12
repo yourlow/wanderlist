@@ -454,7 +454,7 @@ class GetBucketlistActivities(APIView):
             BucketList_Activity.objects.filter(bucketlist_id=id).values('activity_id', 'completed'))
         for activity in bucketlist_activities:
             activity.update(list(
-                Activity.objects.filter(id=activity['activity_id']).values('title', 'latitude', 'longitude', 'tags'))[
+                Activity.objects.filter(id=activity['activity_id']).values('title', 'location', 'tags'))[
                                 0])
         return Response(bucketlist_activities)
 
