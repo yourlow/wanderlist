@@ -405,6 +405,7 @@ class User_ActivityDetail(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#return all reward data
 class GetUserRewards(APIView):
     def get_reward_object(self, id):
         try:
@@ -540,22 +541,18 @@ class SimpleLogin(APIView):
 
 class CompleteActivity(APIView):
     def post(self, request):
-        
         data = request.data
         try:
             activity = Activity.objects.get(id=int(data['activity_id']))
-            
         except:
             return Response("activity does not exist")
-            
-        print(data)
-        
         
         if(int(data['qr_code']) != activity.id):
             return Response("qr codes do not match")
        
         user_activity = User_Activity.objects.filter(user_id=int(data['user_id']), activity_id=int(data['activity_id'])).count()
-        print(user_activity)
+        bucketlist = BucketList.objects.filter(id=int(data['bucketlist_id']))
+        
         if(user_activity):
             return Response("already completed")
         
