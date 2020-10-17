@@ -12,6 +12,7 @@ class Location(models.Model):
     name = models.CharField(max_length=200)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    imageurl = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         return str(self.id) + ' Location: ' + str(self.name)
