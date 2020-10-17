@@ -554,14 +554,24 @@ class CompleteActivity(APIView):
        
         user_activity = User_Activity.objects.filter(user_id=int(data['user_id']), activity_id=int(data['activity_id'])).count()
         bucketlist = BucketList_Activity.objects.filter(bucketlist_id=int(data['bucketlist_id']), activity_id=int(data['activity_id'])).update(completed = 1)
-        print(bucketlist)
+            
         if(user_activity):
             return Response("already completed")
-        
+    
         serializer = User_ActivitySerializer(data=data)
-        
-        if serializer.is_valid():
+      
+        if serializer.is_valid() :
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            reward = Reward.objects.filter(activity_id = int(data['activity_id']))
+            
+            if(not reward.exists()):
+                return Response("-1", status=status.HTTP_201_CREATED)
+            
+            reward = list(reward.values())[0]
+            reward_serializer = User_RewardsSerializer(data = {'reward_id':reward["id"], 'user_id' :int(data['user_id']), 'redeemed' : False} )
+        
+            if(reward_serializer.is_valid()):
+                reward_serializer.save()
+            return Response(reward["name"], status=status.HTTP_201_CREATED)
         
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
