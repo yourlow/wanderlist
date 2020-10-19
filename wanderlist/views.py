@@ -512,8 +512,10 @@ class GetSpecificActivity(APIView):
             raise Http404
 
     def get(self, request, id, format=None):
-        activities = Activity.objects.filter(id=id).values()
-        return Response(list(activities))
+        activities = list(Activity.objects.filter(id=id).values())
+        activities[0]['sustainability_rating'] = Activity.objects.get(id=id).avg_sustainability_rating
+        activities[0]['fun_rating'] = Activity.objects.get(id=id).avg_fun_rating
+        return Response(activities)
 
 class GetBucketlistBelongToUser(APIView):
     def get(self, request, user_id):

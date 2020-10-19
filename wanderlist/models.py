@@ -1,6 +1,7 @@
 from django.db import models
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
+from django.db.models import Avg
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
@@ -35,7 +36,15 @@ class Activity(models.Model):
     tags = models.CharField(max_length=200, blank=True)
     imageurl = models.CharField(max_length=200, blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True)
+    
+    def _get_sustainability_rating(self):
+        return BucketList_Activity.objects.filter(activity_id=self.id).aggregate(avg_s_rating=Avg('sustainability_rating'))['avg_s_rating']
+    avg_sustainability_rating = property(_get_sustainability_rating)
 
+    def _get_fun_rating(self):
+        return BucketList_Activity.objects.filter(activity_id=self.id).aggregate(avg_f_rating=Avg('fun_rating'))['avg_f_rating']
+    avg_fun_rating = property(_get_fun_rating)
+    
     def __str__(self):
         return str(self.id) + ' ' + self.title
 
@@ -79,6 +88,8 @@ class BucketList_Activity(models.Model):
     bucketlist_id = models.ForeignKey(BucketList, on_delete=models.CASCADE)
     activity_id = models.ForeignKey(Activity, on_delete=models.CASCADE)
     completed = models.BooleanField()
+    sustainability_rating = models.IntegerField(default=0)
+    fun_rating = models.IntegerField(default=0)
     
     def __str__(self):
         return str(self.id) + ' BucketList: ' + str(self.bucketlist_id) + ' Activity: ' + str(self.activity_id)
