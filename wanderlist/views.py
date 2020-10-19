@@ -555,7 +555,7 @@ class CompleteActivity(APIView):
             return Response("qr codes do not match")
        
         user_activity = User_Activity.objects.filter(user_id=int(data['user_id']), activity_id=int(data['activity_id'])).count()
-        bucketlist = BucketList_Activity.objects.filter(bucketlist_id=int(data['bucketlist_id']), activity_id=int(data['activity_id'])).update(completed = 1)
+        bucketlist = BucketList_Activity.objects.filter(bucketlist_id=int(data['bucketlist_id']), activity_id=int(data['activity_id'])).update(completed = 1, sustainability_rating=data['sustainability_rating'], fun_rating=data['fun_rating'])
             
         if(user_activity):
             return Response("already completed")
