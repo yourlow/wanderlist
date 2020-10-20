@@ -98,9 +98,10 @@ class ActivityDetail(APIView):
             raise Http404
     
     def get(self, request, id, format=None):
-        activity = self.get_object(id)
-        serializer = ActivitySerializer(activity)
-        return Response(serializer.data)
+        activity = list(Activity.objects.filter(id=id).values())
+        activity[0]['sustainability_rating'] = Activity.objects.get(id=id).avg_sustainability_rating
+        activity[0]['fun_rating'] = Activity.objects.get(id=id).avg_fun_rating
+        return Response(activity)
 
     def put(self, request, id, format=None):
         activity = self.get_object(id)
@@ -452,7 +453,7 @@ class GetBucketlistActivities(APIView):
 
     def get(self, request, id, format=None):
         bucketlist_activities = list(
-            BucketList_Activity.objects.filter(bucketlist_id=id).values('activity_id', 'completed'))
+            BucketList_Activity.objects.filter(bucketlist_id=id).values('activity_id', 'completed', 'sustainability_rating', 'fun_rating'))
         for activity in bucketlist_activities:
             activity.update(list(
                 Activity.objects.filter(id=activity['activity_id']).values('title', 'location', 'tags'))[
