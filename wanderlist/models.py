@@ -36,7 +36,7 @@ class Activity(models.Model):
     tags = models.CharField(max_length=200, blank=True)
     imageurl = models.CharField(max_length=200, blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True)
-    decription = models.CharField(max_length=300, null=True, blank=True)
+    description = models.CharField(max_length=300, null=True, blank=True)
     sustainable_description = models.CharField(max_length=300, null=True, blank=True)
     guidance_description = models.CharField(max_length=300, null=True, blank=True)
 
