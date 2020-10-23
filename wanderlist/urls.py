@@ -39,4 +39,5 @@ urlpatterns = [
     path('get_all_user_rewards/<int:user_id>/', views.GetAllUserRewards.as_view()),
     path('login/<username>/<password>/', views.SimpleLogin.as_view()),
     path('get_all_user_rewards/<int:user_id>/', views.GetAllUserRewards.as_view()),
+    path('rate_activity', views.RateActivity.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

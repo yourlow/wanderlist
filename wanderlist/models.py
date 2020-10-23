@@ -67,7 +67,7 @@ class BucketList(models.Model):
     name = models.CharField(max_length=200)
     user_id = models.ForeignKey(User, on_delete = models.CASCADE)
 
-    def __str__(self):
+    def __str__(self): 
         return str(self.id) + ' ' + self.name + ' User: ' + str(self.user_id) 
 
 class Reward(models.Model):

@@ -193,9 +193,9 @@ class BucketListDetail(APIView):
             raise Http404
 
     def get(self, request, id, format=None):
-        bucketlist = self.get_object(id)
-        serializer = BucketListSerializer(bucketlist)
-        return Response(serializer.data)
+        bucketlist = list(BucketList.objects.filter(id=id).values())
+        bucketlist[0]['activity_count'] = BucketList_Activity.objects.filter(id=id).count()
+        return Response(bucketlist)
 
     def put(self, request, id, format=None):
         bucketlist = self.get_object(id)
@@ -502,8 +502,10 @@ class GetSpecificUserRewards(APIView):
 class GetActivityByLocationID(APIView):
     def get(self, request, location_id):
         activities = Activity.objects.filter(location=location_id).values()
+        for activity in activities:
+            activity['sustainability_rating'] = Activity.objects.get(id=activity['id']).avg_sustainability_rating
+            activity['fun_rating'] = Activity.objects.get(id=activity['id']).avg_fun_rating
         return Response(list(activities))
-
 
 class GetSpecificActivity(APIView):
     def get_object(self, id):
@@ -556,7 +558,7 @@ class CompleteActivity(APIView):
             return Response("qr codes do not match")
        
         user_activity = User_Activity.objects.filter(user_id=int(data['user_id']), activity_id=int(data['activity_id'])).count()
-        bucketlist = BucketList_Activity.objects.filter(bucketlist_id=int(data['bucketlist_id']), activity_id=int(data['activity_id'])).update(completed = 1, sustainability_rating=data['sustainability_rating'], fun_rating=data['fun_rating'])
+        bucketlist = BucketList_Activity.objects.filter(bucketlist_id=int(data['bucketlist_id']), activity_id=int(data['activity_id'])).update(completed = 1)
             
         if(user_activity):
             return Response("already completed")
@@ -578,3 +580,11 @@ class CompleteActivity(APIView):
             return Response(reward["name"], status=status.HTTP_201_CREATED)
         
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class RateActivity(APIView):
+    def post(self, request):
+        data = request.data
+        try:
+            BucketList_Activity.objects.filter(bucketlist_id=int(data['bucketlist_id']), activity_id=int(data['activity_id'])).update(sustainability_rating=data['sustainability_rating'], fun_rating=data['fun_rating'])
+        except:
+            return Response("This activity hasn't been completed")
