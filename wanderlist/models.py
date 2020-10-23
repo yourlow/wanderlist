@@ -59,6 +59,8 @@ class User(models.Model):
     facebook = models.URLField(blank=True)
     twitter = models.URLField(blank=True)
     location = models.CharField(max_length=200, default='St Lucia QLD', blank=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, default=0)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, default=0)
 
     def __str__(self):
         return str(self.id) + ' ' + self.name
