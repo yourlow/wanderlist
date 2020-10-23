@@ -41,11 +41,16 @@ class Activity(models.Model):
     guidance_description = models.CharField(max_length=300, null=True, blank=True)
 
     def _get_sustainability_rating(self):
-        return BucketList_Activity.objects.filter(activity_id=self.id).aggregate(avg_s_rating=Avg('sustainability_rating'))['avg_s_rating']
+        #if it returns something, else return 0 
+        if BucketList_Activity.objects.filter(activity_id=self.id).aggregate(avg_s_rating=Avg('sustainability_rating'))['avg_s_rating']:
+            return BucketList_Activity.objects.filter(activity_id=self.id).aggregate(avg_s_rating=Avg('sustainability_rating'))['avg_s_rating']
+        return 0
     avg_sustainability_rating = property(_get_sustainability_rating)
 
     def _get_fun_rating(self):
-        return BucketList_Activity.objects.filter(activity_id=self.id).aggregate(avg_f_rating=Avg('fun_rating'))['avg_f_rating']
+        if BucketList_Activity.objects.filter(activity_id=self.id).aggregate(avg_f_rating=Avg('fun_rating'))['avg_f_rating']:
+            return BucketList_Activity.objects.filter(activity_id=self.id).aggregate(avg_f_rating=Avg('fun_rating'))['avg_f_rating']
+        return 0
     avg_fun_rating = property(_get_fun_rating)
     
     def __str__(self):
