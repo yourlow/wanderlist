@@ -194,7 +194,7 @@ class BucketListDetail(APIView):
 
     def get(self, request, id, format=None):
         bucketlist = list(BucketList.objects.filter(id=id).values())
-        bucketlist[0]['activity_count'] = BucketList_Activity.objects.filter(id=id).count()
+        bucketlist[0]['activity_count'] = BucketList_Activity.objects.filter(bucketlist_id=id).count()
         return Response(bucketlist)
 
     def put(self, request, id, format=None):
