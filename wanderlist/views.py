@@ -321,9 +321,14 @@ class BucketList_ActivityList(APIView):
     def post(self, request, format=None):
         serializer = BucketList_ActivitySerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+            bucketlist = list(BucketList_Activity.objects.filter(bucketlist_id=request.data['bucketlist_id'],
+                                                                 activity_id=request.data['activity_id']).values())
+            if not bucketlist:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 class BucketList_ActivityDetail(APIView):
