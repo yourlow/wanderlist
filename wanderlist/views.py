@@ -531,6 +531,8 @@ class GetSpecificActivity(APIView):
 class GetBucketlistBelongToUser(APIView):
     def get(self, request, user_id):
         bucketlist = BucketList.objects.filter(user_id=user_id).values()
+        for bucket in bucketlist:
+            bucket['activity_count'] = BucketList_Activity.objects.filter(bucketlist_id=bucket['bucketlist_id']).count()
         return Response(list(bucketlist))
 
 class GetAllUserRewards(APIView):
