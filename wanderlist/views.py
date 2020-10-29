@@ -596,5 +596,6 @@ class RateActivity(APIView):
         data = request.data
         try:
             BucketList_Activity.objects.filter(bucketlist_id=int(data['bucketlist_id']), activity_id=int(data['activity_id'])).update(sustainability_rating=data['sustainability_rating'], fun_rating=data['fun_rating'])
+            return Response("Rating successful")
         except:
             return Response("This activity hasn't been completed")
