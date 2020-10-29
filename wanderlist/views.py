@@ -537,7 +537,7 @@ class GetAllUserRewards(APIView):
     def get(self, request, user_id):
         user_rewards = list(User_Rewards.objects.filter(user_id=user_id).values())
         for user_reward in user_rewards:
-            user_reward.update(list(Reward.objects.filter(id=user_reward['id']).values())[0])
+            user_reward.update(list(Reward.objects.filter(id=user_reward['reward_id_id']).values())[0])
         return Response(user_rewards)
 
 class SimpleLogin(APIView):
